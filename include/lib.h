@@ -1,0 +1,85 @@
+#ifndef LIB_H
+#define LIB_H
+
+#include <iostream>
+
+namespace lib{
+
+    template <typename T>
+    class vetor
+    {
+    private:
+        T* dados;        
+        int tamanho;     
+        int capacidade;
+
+        void dobrar_capacidade(){
+            T* temp = new T[capacidade * 2];
+            for (int i = 0; i < tamanho; i++) temp[i] = dados[i];
+            delete[] dados;
+            dados = temp;
+            capacidade = capacidade * 2;
+        }
+
+    public:
+        // começo com 4 para não ter que realocar de cara
+        vetor() : dados(new T[4]), tamanho(0), capacidade(4) {} 
+        ~vetor() { delete[] dados; }
+
+        vetor(const vetor& outro)
+            : dados(new T[outro.capacidade]),
+            tamanho(outro.tamanho),
+            capacidade(outro.capacidade) {
+            for (int i = 0; i < tamanho; i++) dados[i] = outro.dados[i];
+        }
+
+        vetor& operator=(const vetor& outro) {
+            if (this != &outro) {
+                T* novo = new T[outro.capacidade];
+                for (int i = 0; i < outro.tamanho; i++) novo[i] = outro.dados[i];
+                delete[] dados;
+                dados = novo;
+                tamanho = outro.tamanho;
+                capacidade = outro.capacidade;
+            }
+            return *this;
+        }
+        
+
+        void add_no_fim(T& valor){
+            if (tamanho == capacidade) dobrar_capacidade();
+            dados[tamanho] = valor;
+            tamanho++;
+            //std::cout << "inseri" << "\n";
+        }
+
+        void rem_no_fim(){
+            if (!isEmpty()){
+                dados[tamanho-1] = T();
+                tamanho--;   
+            }
+             
+        }
+
+
+        T getById(int id){
+            if (id >= 0 && id < getTamanho())
+                return dados[id];
+            else {
+                std::cout << "Posição inválida" << "\n";
+                return T();
+            }
+        }
+
+        int getTamanho() const { return tamanho; }
+        int isEmpty() {
+            return (tamanho == 0 || capacidade == 0);
+        }
+    };
+    
+    
+
+
+}
+
+#endif
