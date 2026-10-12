@@ -10,6 +10,7 @@ int main()
 
     lib::vetor<tads::Atributo> atributos;
     lib::vetor<tads::Item> itens;
+    lib::vetor<tads::Aventureiro> aventureiros;
 
     while (std::cin >> cmd){
 

@@ -58,7 +58,20 @@ namespace tads{
         static void imprimirLista(lib::vetor<Mod> &v);
     };
 
-
+    class Aventureiro
+    {
+    private:
+        int id;
+        std::string nome;
+    public:
+        Aventureiro();
+        Aventureiro(int id, std::string nome);
+    
+    
+    };
+    
+ 
+    
 
 }
 #endif
