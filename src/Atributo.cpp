@@ -10,7 +10,7 @@ bool tads::Atributo::isEmpty() { return (id == -1 && nome == ""); }
 
 void tads::Atributo::imprimirLista(lib::vetor<Atributo> &v){
     for (int i = 0; i < v.getTamanho(); i++){
-        auto t = v.getById(i);
+        const auto& t = v.getById(i);
         std::cout << "A " << t.getId() << "\n";
     }
 }

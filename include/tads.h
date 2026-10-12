@@ -45,15 +45,14 @@ namespace tads{
     private:
         int id_item;
         int id_atributo;
-        std::string nome;
+        int valor;
     public:
         Mod();
-        Mod(std::string nome);
-        Mod(std::string nome, int id_item, int id_atributo);
+        Mod(int id_item, int id_atributo, int valor);
 
         int getIdItem() const;
         int getIdAtributo() const;
-        const std::string& getNome() const;
+        int getValor() const;
 
         bool isEmpty();
         static void imprimirLista(lib::vetor<Mod> &v);

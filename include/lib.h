@@ -1,6 +1,7 @@
 #ifndef LIB_H
 #define LIB_H
 
+#include <cassert>
 #include <iostream>
 
 namespace lib{
@@ -46,7 +47,7 @@ namespace lib{
         }
         
 
-        void add_no_fim(T& valor){
+        void add_no_fim(const T& valor){
             if (tamanho == capacidade) dobrar_capacidade();
             dados[tamanho] = valor;
             tamanho++;
@@ -63,12 +64,13 @@ namespace lib{
 
 
         T getById(int id){
-            if (id >= 0 && id < getTamanho())
-                return dados[id];
-            else {
-                std::cout << "Posição inválida" << "\n";
-                return T();
-            }
+            assert(id >= 0 && id < tamanho);
+            return dados[id];
+        }
+
+        const T& getById(int id) const {
+            assert(id >= 0 && id < tamanho);
+            return dados[id];
         }
 
         int getTamanho() const { return tamanho; }

@@ -10,7 +10,7 @@ bool tads::Item::isEmpty() { return (id == -1 && nome == ""); }
 
 void tads::Item::imprimirLista(lib::vetor<Item> &v){
     for (int i = 0; i < v.getTamanho(); i++){
-        auto t = v.getById(i);
+        const auto& t = v.getById(i);
         std::cout << "I " << t.getId() << "\n";
     }
 }
