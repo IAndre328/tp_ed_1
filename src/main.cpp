@@ -11,6 +11,9 @@ int main()
     lib::vetor<tads::Atributo> atributos;
     lib::vetor<tads::Item> itens;
     lib::vetor<tads::Aventureiro> aventureiros;
+    tads::fila forja;
+
+    lib::vetor<tads::Mod> mods;
 
     while (std::cin >> cmd){
 
@@ -36,10 +39,15 @@ int main()
             //tads::Item::imprimirLista(itens);
         }
         else if (cmd == "M"){
-           int id_Mod, id_atributo, valor;
-           std::cin >> id_Mod; 
+           int id_item, id_atributo, valor;
+           std::cin >> id_item; 
            std::cin >> id_atributo;
            std::cin >> valor;
+
+           if (valor != 0){
+                tads::Mod t_m(id_item, id_atributo, valor);
+
+           }
            // guardar isso
         }
         else if (cmd == "H"){
@@ -52,9 +60,13 @@ int main()
             std::cout << "H " << temp.getId() << "\n";
         }
         else if (cmd == "F"){
-            int id_aventureiro, id_Mod;
+            int id_aventureiro, id_item;
             std::cin >> id_aventureiro;
-            std::cin >> id_Mod;
+            std::cin >> id_item;
+
+            tads::Encomenda enc(id_aventureiro, id_item);
+            forja.enfileira(enc);
+            std::cout << "F " << forja.getTamanho() << "\n";
             // fazer algo com isso
         }
         else if (cmd == "Z"){
@@ -64,9 +76,11 @@ int main()
         else if (cmd == "D"){
             int id_aventureiro;
             std::cin >> id_aventureiro;
-            tads::Aventureiro t_av = aventureiros.getById(id_aventureiro); 
 
+            tads::Aventureiro& t_av = aventureiros.getById(id_aventureiro); 
             const std::string& t_nome = t_av.getNome();
+            
+
             std::cout << "D ";
 
             if (!t_av.semItens()){

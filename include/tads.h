@@ -77,6 +77,76 @@ namespace tads{
         int getId() const;
         const std::string& getNome() const;
     };
+
+    class Encomenda
+    {
+    private:
+        int id_av;
+        int id_i;
+        Encomenda* prox;
+    public:
+        Encomenda();
+        Encomenda(int id_av, int id_i);
+
+        void setProx(tads::Encomenda* p);
+
+        Encomenda* getProx();
+        int getIdAv() const;
+        int getIdI() const;
+    };
+    
+    class fila
+    {
+    private:
+        int tamanho;
+        tads::Encomenda* inicio;
+        tads::Encomenda* fim;
+    public:
+        fila() : tamanho(0), inicio(nullptr), fim(nullptr) {}
+        
+
+        void enfileira(tads::Encomenda& item){
+            tads::Encomenda* novo = new tads::Encomenda(item.getIdAv(), item.getIdI());
+            if (tamanho == 0){
+                inicio = novo;
+                fim = novo;
+            }
+            else {
+                fim->setProx(novo);
+            }
+            fim = novo;
+            tamanho++;
+        }
+
+        tads::Encomenda desenfileira(){
+            if (tamanho == 0) return tads::Encomenda();
+
+            tads::Encomenda* atual = inicio;
+            tads::Encomenda removido = *atual;   // copia antes de apagar
+            inicio = atual->getProx();
+            delete atual;
+            if (inicio == nullptr) fim = nullptr;
+            tamanho--;
+            return removido;
+        }
+
+
+        void limpa() {
+            while (inicio != nullptr) {
+                tads::Encomenda* atual = inicio;
+                inicio = inicio->getProx();
+                delete atual;
+            }
+            fim = nullptr;
+            tamanho = 0;
+        }
+
+        int getTamanho() const { return tamanho; }
+        bool isEmpty() const { return tamanho == 0; }
+
+        ~fila() { limpa(); }
+    };
+    
     
  
     
