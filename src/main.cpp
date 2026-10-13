@@ -15,64 +15,83 @@ int main()
     while (std::cin >> cmd){
 
         if (cmd == "E") std::cin >> modo;
-        if (cmd == "A"){
+        else if (cmd == "A"){
             std::string nome;
             std::cin >> nome;
             
             tads::Atributo temp(nome, atributos.getTamanho());
             atributos.add_no_fim(temp);
 
-            tads::Atributo::imprimirLista(atributos);
+            std::cout << "A " << temp.getId() << "\n";
+            //tads::Atributo::imprimirLista(atributos);
         }
-        if (cmd == "I"){
+        else if (cmd == "I"){
             std::string nome;
             std::cin >> nome;
             
             tads::Item temp(nome, itens.getTamanho());
             itens.add_no_fim(temp);
 
-            tads::Item::imprimirLista(itens);
+            std::cout << "I " << temp.getId() << "\n";
+            //tads::Item::imprimirLista(itens);
         }
-        if (cmd == "M"){
+        else if (cmd == "M"){
            int id_Mod, id_atributo, valor;
            std::cin >> id_Mod; 
            std::cin >> id_atributo;
            std::cin >> valor;
            // guardar isso
         }
-        if (cmd == "H"){
+        else if (cmd == "H"){
             std::string nome;
             std::cin >> nome;
-            // Guardar isso
+            
+            tads::Aventureiro temp(aventureiros.getTamanho(), nome);
+            aventureiros.add_no_fim(temp);
+
+            std::cout << "H " << temp.getId() << "\n";
         }
-        if (cmd == "F"){
+        else if (cmd == "F"){
             int id_aventureiro, id_Mod;
             std::cin >> id_aventureiro;
             std::cin >> id_Mod;
             // fazer algo com isso
         }
-        if (cmd == "Z"){
+        else if (cmd == "Z"){
             int turnos;
             std::cin >> turnos;
         }
-        if (cmd == "D"){
+        else if (cmd == "D"){
             int id_aventureiro;
             std::cin >> id_aventureiro;
+            tads::Aventureiro t_av = aventureiros.getById(id_aventureiro); 
+
+            const std::string& t_nome = t_av.getNome();
+            std::cout << "D ";
+
+            if (!t_av.semItens()){
+                const std::string& i_nome = itens.getById(t_av.ultimoEquipado()).getNome();
+                std::cout << i_nome << "\n";
+            }
+            else std::cout << "VAZIO" << "\n";
+
+            t_av.desequipar();
         }
-        if (cmd == "LI"){
+        else if (cmd == "LI"){
             int id_Mod;
             std::cin >> id_Mod;
         }
-        if (cmd == "LA"){
+        else if (cmd == "LA"){
             int id_atributo;
             std::cin >> id_atributo;
         }
-        if (cmd == "LH"){
+        else if (cmd == "LH"){
             int id_aventureiro;
             std::cin >> id_aventureiro;
+        }   
+        else if (cmd == "Q"){
+            
         }
-    }   if (cmd == "Q"){
-        
     }
 
     /* code */

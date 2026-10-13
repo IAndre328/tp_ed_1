@@ -59,11 +59,11 @@ namespace lib{
                 dados[tamanho-1] = T();
                 tamanho--;   
             }
-             
+            
         }
 
 
-        T getById(int id){
+        T& getById(int id){
             assert(id >= 0 && id < tamanho);
             return dados[id];
         }
@@ -74,12 +74,33 @@ namespace lib{
         }
 
         int getTamanho() const { return tamanho; }
-        int isEmpty() {
+        bool isEmpty() const {
             return (tamanho == 0 || capacidade == 0);
         }
     };
     
+    class pilha
+    {
+    private:
+        vetor<int> dados;
+    public:
+        pilha() : dados() {} 
+
+        void empilhar(int valor){ dados.add_no_fim(valor); }
+        void desempilhar(){ dados.rem_no_fim(); }
+
+        bool isEmpty() const { return dados.isEmpty(); }
+        int getTamanho() { return dados.getTamanho(); }
+
+        int getTopo() const {
+            if (!isEmpty()) return dados.getById(dados.getTamanho() -1);
+            else return -1;
+        }
+    };
+
     
+    
+        
 
 
 }

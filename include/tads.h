@@ -54,7 +54,7 @@ namespace tads{
         int getIdAtributo() const;
         int getValor() const;
 
-        bool isEmpty();
+        bool isEmpty() const;
         static void imprimirLista(lib::vetor<Mod> &v);
     };
 
@@ -63,11 +63,19 @@ namespace tads{
     private:
         int id;
         std::string nome;
+        lib::pilha build;
     public:
         Aventureiro();
         Aventureiro(int id, std::string nome);
     
-    
+        void equipar(int id_item);
+        void desequipar();
+        int ultimoEquipado() const;
+        bool semItens() const;
+        int qtdEquipados();
+
+        int getId() const;
+        const std::string& getNome() const;
     };
     
  
