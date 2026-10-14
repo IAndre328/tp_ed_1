@@ -17,7 +17,13 @@ int main()
 
     while (std::cin >> cmd){
 
-        if (cmd == "E") std::cin >> modo;
+        if (cmd == "E") {
+            std::cin >> modo;
+
+            std::cout << "E " << modo << "\n";
+
+            // Pendente realizar os modos certinho
+        }
         else if (cmd == "A"){
             std::string nome;
             std::cin >> nome;
@@ -72,6 +78,24 @@ int main()
         else if (cmd == "Z"){
             int turnos;
             std::cin >> turnos;
+            
+            if (turnos > forja.getTamanho()) turnos = forja.getTamanho();
+            std::cout << "Z " << turnos << "\n";
+
+            if (turnos == 0) continue;
+
+            for (int i = 0; i < turnos; i++){
+                tads::Encomenda enc_atual = forja.desenfileira();
+                tads::Aventureiro& av_atual = aventureiros.getById(enc_atual.getIdAv());
+                av_atual.equipar(enc_atual.getIdI());
+
+                if (i > 0) std::cout << " ";
+                std::cout << "encomenda_" << i+1
+                    << " " << enc_atual.getIdAv()
+                    << " " << enc_atual.getIdI();
+
+            }
+            std::cout << "\n";
         }
         else if (cmd == "D"){
             int id_aventureiro;
@@ -80,16 +104,17 @@ int main()
             tads::Aventureiro& t_av = aventureiros.getById(id_aventureiro); 
             const std::string& t_nome = t_av.getNome();
             
+            std::cout << "D " << t_nome << " ";
 
-            std::cout << "D ";
+            if (t_av.semItens()) std::cout << "VAZIO" << "\n";
+            else{
+                int id_item_remov = t_av.ultimoEquipado();
+                const tads::Item& item_remov = itens.getById(id_item_remov);
 
-            if (!t_av.semItens()){
-                const std::string& i_nome = itens.getById(t_av.ultimoEquipado()).getNome();
-                std::cout << i_nome << "\n";
+                std::cout << item_remov.getNome() << "\n";
+                t_av.desequipar();
             }
-            else std::cout << "VAZIO" << "\n";
 
-            t_av.desequipar();
         }
         else if (cmd == "LI"){
             int id_Mod;

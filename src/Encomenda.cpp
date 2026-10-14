@@ -9,6 +9,6 @@ void tads::Encomenda::setProx(tads::Encomenda* p){
     prox = p;
 }
 
-tads::Encomenda* tads::Encomenda::getProx() { return prox; }
+tads::Encomenda* tads::Encomenda::getProx() const { return prox; }
 int tads::Encomenda::getIdAv() const { return id_av; }
 int tads::Encomenda::getIdI() const { return id_i; }

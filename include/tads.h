@@ -3,6 +3,7 @@
 
 #include "lib.h"
 #include <string>
+#include <iostream>
 
 namespace tads{
 
@@ -90,7 +91,7 @@ namespace tads{
 
         void setProx(tads::Encomenda* p);
 
-        Encomenda* getProx();
+        Encomenda* getProx() const;
         int getIdAv() const;
         int getIdI() const;
     };
@@ -105,7 +106,7 @@ namespace tads{
         fila() : tamanho(0), inicio(nullptr), fim(nullptr) {}
         
 
-        void enfileira(tads::Encomenda& item){
+        void enfileira(const tads::Encomenda& item){
             tads::Encomenda* novo = new tads::Encomenda(item.getIdAv(), item.getIdI());
             if (tamanho == 0){
                 inicio = novo;

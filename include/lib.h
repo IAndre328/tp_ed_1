@@ -2,7 +2,6 @@
 #define LIB_H
 
 #include <cassert>
-#include <iostream>
 
 namespace lib{
 
@@ -90,7 +89,7 @@ namespace lib{
         void desempilhar(){ dados.rem_no_fim(); }
 
         bool isEmpty() const { return dados.isEmpty(); }
-        int getTamanho() { return dados.getTamanho(); }
+        int getTamanho() const { return dados.getTamanho(); }
 
         int getTopo() const {
             if (!isEmpty()) return dados.getById(dados.getTamanho() -1);
