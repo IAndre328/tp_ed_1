@@ -50,9 +50,15 @@ int main()
            std::cin >> id_atributo;
            std::cin >> valor;
 
+           tads::Item& t_i = itens.getById(id_item);
+           tads::Atributo& t_a = atributos.getById(id_atributo);
+
+            std::cout << "M " << t_i.getNome() << " "
+                << t_a.getNome() << " "
+                << valor << "\n";
+
            if (valor != 0){
                 tads::Mod t_m(id_item, id_atributo, valor);
-
            }
            // guardar isso
         }
