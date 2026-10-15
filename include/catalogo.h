@@ -39,7 +39,6 @@ namespace tads{
  
         // Usados na migração entre modos
         void entregarTodas(lib::vetor<Mod>& saida) const;
-        void limpar();
  
         int getTamanho() const;
  
@@ -48,14 +47,29 @@ namespace tads{
         long long getDeslocamentos() const;
         long long getPercorridas() const;
         void zerarContadores();
+
+        void limpar();
+        ~catalogoT();
     };
 
+
+    struct NoCruzado {
+        int id_item;
+        int id_atributo;
+        int valor;
+        NoCruzado* proximo_linha;   // Próximo na mesma linha (mesmo item)
+        NoCruzado* proximo_coluna;  // Próximo na mesma coluna (mesmo atributo)
+
+        NoCruzado(int item, int atrib, int val)
+            : id_item(item), id_atributo(atrib), valor(val),
+              proximo_linha(nullptr), proximo_coluna(nullptr) {}
+    };
 
     class catalogoL
     {
     private:
-        std::string modo;
-        int tamanho;
+        lib::vetor<NoCruzado*> cabecas_linha;
+        lib::vetor<NoCruzado*> cabecas_coluna;
     public:
         catalogoL(const std::string& modo);
 
@@ -72,7 +86,7 @@ namespace tads{
         int getTamanho() const;
 
         void limpar();
-        ~catalogoL();
+        ~catalogoL() = default;
     };
 
 
@@ -100,7 +114,7 @@ namespace tads{
         int getTamanho() const;
 
         void limpar();
-        ~catalogo();
+        ~catalogo() = default;
     };
     
 

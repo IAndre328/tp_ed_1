@@ -55,6 +55,7 @@ namespace tads{
         int getIdAtributo() const;
         int getValor() const;
 
+        void setValor(int v);
         bool isEmpty() const;
         static void imprimirLista(lib::vetor<Mod> &v);
     };

@@ -8,6 +8,8 @@ int tads::Mod::getIdItem() const { return id_item; }
 int tads::Mod::getIdAtributo() const { return id_atributo; }
 int tads::Mod::getValor() const { return valor; }
 
+void tads::Mod::setValor(int v) { valor = v; }
+
 bool tads::Mod::isEmpty() const { return (id_item == -1 || id_atributo == -1 || valor == 0); }
 
 void tads::Mod::imprimirLista(lib::vetor<Mod> &v){

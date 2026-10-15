@@ -61,6 +61,26 @@ namespace lib{
             
         }
 
+        void inserir_na_posicao(int pos, const T& valor) {
+            assert(pos >= 0 && pos <= tamanho);
+            if (tamanho == capacidade) {
+                dobrar_capacidade();
+            }
+            for (int i = tamanho; i > pos; i--) {
+                dados[i] = dados[i - 1];
+            }
+            dados[pos] = valor;
+            tamanho++;
+        }
+
+        void remover_da_posicao(int pos) {
+            assert(pos >= 0 && pos < tamanho);
+            for (int i = pos; i < tamanho - 1; i++) {
+                dados[i] = dados[i + 1];
+            }
+            dados[tamanho - 1] = T(); 
+            tamanho--;
+        }
 
         T& getById(int id){
             assert(id >= 0 && id < tamanho);
@@ -75,6 +95,14 @@ namespace lib{
         int getTamanho() const { return tamanho; }
         bool isEmpty() const {
             return (tamanho == 0 || capacidade == 0);
+        }
+
+        void limpar(){
+            delete[] dados;          
+            dados = new T[4];        
+            tamanho = 0;             
+            capacidade = 4;
+            
         }
     };
     

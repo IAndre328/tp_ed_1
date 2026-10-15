@@ -1,6 +1,7 @@
 #include "main.h"
 #include "lib.h"
 #include "tads.h"
+#include "catalogo.h"
 
 
 int main()
@@ -12,8 +13,8 @@ int main()
     lib::vetor<tads::Item> itens;
     lib::vetor<tads::Aventureiro> aventureiros;
     tads::fila forja;
-
-    lib::vetor<tads::Mod> mods;
+    //tads::catalogo catalogo("T");
+    
 
     while (std::cin >> cmd){
 
@@ -79,7 +80,6 @@ int main()
             tads::Encomenda enc(id_aventureiro, id_item);
             forja.enfileira(enc);
             std::cout << "F " << forja.getTamanho() << "\n";
-            // fazer algo com isso
         }
         else if (cmd == "Z"){
             int turnos;
@@ -125,6 +125,8 @@ int main()
         else if (cmd == "LI"){
             int id_Mod;
             std::cin >> id_Mod;
+
+
         }
         else if (cmd == "LA"){
             int id_atributo;
