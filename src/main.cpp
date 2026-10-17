@@ -2,6 +2,7 @@
 #include "lib.h"
 #include "tads.h"
 #include "catalogo.h"
+#include "recomendacao.h"
 
 
 int main()
@@ -14,6 +15,7 @@ int main()
     lib::vetor<tads::Aventureiro> aventureiros;
     tads::fila forja;
     tads::catalogo catalogo("T");
+    tads::recomendador recomendacao;
     
 
     while (std::cin >> cmd){
@@ -173,29 +175,30 @@ int main()
             const tads::Aventureiro& av_atual = aventureiros.getById(id_aventureiro);
 
             if (av_atual.semItens()){
-                std::cout << av_atual.getNome() 
-                    << " " << "VAZIO" << "\n";
+                std::cout << "LH " << av_atual.getNome() << " VAZIO" << "\n";
             }
             else {
-                tads::Aventureiro av_atual = aventureiros.getById(id_aventureiro);
-                int matriz_atributo[atributos.getTamanho()] = {0};
+                lib::vetor<int> matriz_atributo;
+                for (int i = 0; i < atributos.getTamanho(); i++) matriz_atributo.add_no_fim(0);
 
+                lib::vetor<tads::Mod> saida;
                 for (int i = 0; i < av_atual.getTamanhoBuild(); i++){
-                    lib::vetor<tads::Mod> saida;
                     catalogo.percorrerLinha(av_atual.getBuildIdItem(i), saida);
                     for (int j = 0; j < saida.getTamanho(); j++){
-                        matriz_atributo[saida.getById(j).getIdAtributo()] += saida.getById(j).getValor();
+                        matriz_atributo.getById(saida.getById(j).getIdAtributo()) += saida.getById(j).getValor();
                     }
                 }
 
                 bool isEmpty = true;
                 std::cout << "LH " << av_atual.getNome();
 
+                int num_atributo = 1;
                 for (int i = 0; i < atributos.getTamanho(); i++){
-                    if (matriz_atributo[i] != 0){
+                    if (matriz_atributo.getById(i) != 0){
                         isEmpty = false;
-                        std::cout << " atributo_" << i+1 
-                            << i << " " << matriz_atributo[i];
+                        std::cout << " atributo_" << num_atributo 
+                            << i << " " << matriz_atributo.getById(i);
+                        num_atributo++;
                     }
                 }
                 
@@ -210,7 +213,34 @@ int main()
             
         }   
         else if (cmd == "Q"){
-            
+            int id_aventureiro, n, m;
+            std::cin >> id_aventureiro >> n >> m;
+ 
+            lib::vetor<int> metricas;
+            lib::vetor<long long> pesos;
+            for (int j = 0; j < m; j++){
+                std::string nome_metrica, texto_peso;
+                std::cin >> nome_metrica >> texto_peso;
+ 
+                if (nome_metrica == "PODER") metricas.add_no_fim(tads::PODER);
+                else if (nome_metrica == "EQUILIBRIO") metricas.add_no_fim(tads::EQUILIBRIO);
+                else metricas.add_no_fim(tads::SINERGIA);
+ 
+                pesos.add_no_fim(tads::pesoParaCentesimos(texto_peso));
+            }
+ 
+            lib::vetor<int> ids;
+            lib::vetor<long long> scores;
+            int k = recomendacao.consultar(catalogo, aventureiros.getById(id_aventureiro),
+                                           itens.getTamanho(), atributos.getTamanho(), n,
+                                           metricas, pesos, ids, scores);
+ 
+            for (int p = 0; p < k; p++){
+                long long s = scores.getById(p);
+                long long centavos = s % 100;
+                std::cout << "Q " << p + 1 << " " << ids.getById(p) << " "
+                          << s / 100 << "." << (centavos < 10 ? "0" : "") << centavos << "\n";
+            }
         }
     }
 
