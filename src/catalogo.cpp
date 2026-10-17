@@ -31,30 +31,25 @@ namespace tads {
     }
 
     void catalogo::migrarPara(std::string newModo){
+        if (newModo == modo) return;
+
+        lib::vetor<Mod> todas;
+ 
         if (modo == "T") {
-            if (L.getTamanho() == 0){
-                modo = newModo;
-                return;
-            }
-            else {
-                lib::vetor<Mod> saida;
-                L.entregarTodas(saida);
-                T.receberMigracao(saida);
-            }
+            T.entregarTodas(todas);
+            L.receberMigracao(todas);
+            T.limpar();
         }
         else if (modo == "L") {
-            if (T.getTamanho() == 0){
-                modo = newModo;
-                return;
-            }
-            else {
-                lib::vetor<Mod> saida;
-                T.entregarTodas(saida);
-                L.receberMigracao(saida); 
-            }
+            L.entregarTodas(todas);
+            T.receberMigracao(todas);
+            L.limpar();
         }
         else throw "Erro, modo inesperado";
+ 
+        modo = newModo;
     }
+
 
     int catalogo::getTamanho() const {
         if (modo == "T") return T.getTamanho();

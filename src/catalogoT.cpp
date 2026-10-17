@@ -50,7 +50,7 @@ void catalogoT::definirCelula(int item, int atributo, int valor) {
     if (valor == 0){
         if (existe == true){
             celulas.remover_da_posicao(pos);
-            deslocamentos += celulas.getTamanho() - 1 - pos;
+            deslocamentos += celulas.getTamanho() - pos;
         }
     } else {
         if (existe == true){
@@ -58,7 +58,7 @@ void catalogoT::definirCelula(int item, int atributo, int valor) {
         } else{
             Mod novoMod(item, atributo, valor);
             celulas.inserir_na_posicao(pos, novoMod);
-            deslocamentos += getTamanho() - pos;
+            deslocamentos += getTamanho() - 1 - pos;
         }
     }
 
@@ -67,8 +67,12 @@ void catalogoT::definirCelula(int item, int atributo, int valor) {
 
 int catalogoT::consultarCelula(int item, int atributo) const {
     int pos = posicao(item, atributo);
-    if (pos != celulas.getTamanho()) return celulas.getById(pos).getValor();
-    else return 0;
+    if (pos < celulas.getTamanho()) {
+    const auto& c = celulas.getById(pos);
+        if (c.getIdItem() == item && c.getIdAtributo() == atributo) return c.getValor();
+    }
+    return 0;
+
 }
 
 int catalogoT::percorrerLinha(int item, lib::vetor<Mod>& saida) {
