@@ -74,7 +74,9 @@ namespace tads{
         void desequipar();
         int ultimoEquipado() const;
         bool semItens() const;
+        int getTamanhoBuild() const;
         int qtdEquipados();
+        int getBuildIdItem(int id) const;
 
         int getId() const;
         const std::string& getNome() const;

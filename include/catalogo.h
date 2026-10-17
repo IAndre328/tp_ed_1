@@ -22,14 +22,11 @@ namespace tads{
  
     public:
         catalogoT();
-        catalogoT(const lib::vetor<Mod>& vetor_mods);
+        void receberMigracao(const lib::vetor<Mod>& vetor_mods);
  
         // Regra do zero: valor 0 remove; célula existente é substituída; senão insere
         void definirCelula(int item, int atributo, int valor);
- 
-        // true se existia e foi removida
-        bool removerCelula(int item, int atributo);
- 
+
         // Valor da célula, ou 0 se não existe
         int consultarCelula(int item, int atributo) const;
  
@@ -76,7 +73,7 @@ namespace tads{
         long long percorridas;
     public:
         catalogoL();
-        catalogoL(const lib::vetor<Mod>& vetor_mods);
+        void receberMigracao(const lib::vetor<Mod>& vetor_mods);
 
         void definirCelula(int item, int atributo, int valor);
         void acharApontadores(int item, int atributo, NoCruzado*& l_ant, NoCruzado*& c_ant);
@@ -115,7 +112,6 @@ namespace tads{
     {
     private:
         std::string modo;
-        int tamanho;
         catalogoT T;
         catalogoL L;
 
@@ -125,12 +121,12 @@ namespace tads{
         void definirCelula(const tads::Mod& mod);
         tads::Mod& consultarCelula(const tads::Mod& mod);
         
-        void percorrerLinha();
-        void percorrerColuna();
+        void percorrerLinha(int item, lib::vetor<Mod>& saida);
+        void percorrerColuna(int atributo, lib::vetor<Mod>& saida);
 
         void produtoInterno();
 
-        void migrar();
+        void migrarPara(std::string newModo);
 
         int getTamanho() const;
 

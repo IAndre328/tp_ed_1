@@ -4,7 +4,7 @@ namespace tads {
 
 catalogoT::catalogoT() : comparacoes(0), deslocamentos(0), percorridas(0) {}
 
-catalogoT::catalogoT(const lib::vetor<Mod>& vetor_mods) {
+void catalogoT::receberMigracao(const lib::vetor<Mod>& vetor_mods) {
     celulas.limpar();
 
     for (int i = 0; i < vetor_mods.getTamanho(); i++) {

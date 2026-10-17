@@ -8,7 +8,7 @@ namespace tads
         deslocamentos(0), 
         percorridas(0) {}
 
-    catalogoL::catalogoL(const lib::vetor<Mod>& vetor_mods) {
+    void catalogoL::receberMigracao(const lib::vetor<Mod>& vetor_mods) {
         cabecas_coluna.limpar();
         cabecas_linha.limpar();
         tamanho = 0;

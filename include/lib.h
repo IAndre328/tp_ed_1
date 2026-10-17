@@ -119,6 +119,8 @@ namespace lib{
         bool isEmpty() const { return dados.isEmpty(); }
         int getTamanho() const { return dados.getTamanho(); }
 
+        int getById(int id) const { return dados.getById(id); }
+
         int getTopo() const {
             if (!isEmpty()) return dados.getById(dados.getTamanho() -1);
             else return -1;

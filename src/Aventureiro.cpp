@@ -12,5 +12,7 @@ void tads::Aventureiro::desequipar() { build.desempilhar(); }
 bool tads::Aventureiro::semItens() const { return build.isEmpty(); }
 int tads::Aventureiro::qtdEquipados() { return build.getTamanho(); }
 
+int tads::Aventureiro::getBuildIdItem(int id) const { return build.getById(id); }
+int tads::Aventureiro::getTamanhoBuild() const { return build.getTamanho(); }
 int tads::Aventureiro::getId() const { return id; }
 const std::string& tads::Aventureiro::getNome() const { return nome; }
