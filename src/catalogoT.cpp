@@ -4,6 +4,16 @@ namespace tads {
 
 catalogoT::catalogoT() : comparacoes(0), deslocamentos(0), percorridas(0) {}
 
+catalogoT::catalogoT(const lib::vetor<Mod>& vetor_mods) {
+    celulas.limpar();
+
+    for (int i = 0; i < vetor_mods.getTamanho(); i++) {
+        Mod m = vetor_mods.getById(i);
+        
+        definirCelula(m.getIdItem(), m.getIdAtributo(), m.getValor());
+    }
+}
+
 int catalogoT::posicao(int item, int atributo) const {
     int inicio = 0;
     int fim = celulas.getTamanho() - 1;
@@ -61,7 +71,6 @@ int catalogoT::consultarCelula(int item, int atributo) const {
     else return 0;
 }
 
-// Retorna o número de valores percorridos, alterando a saida
 int catalogoT::percorrerLinha(int item, lib::vetor<Mod>& saida) {
     while (!saida.isEmpty()) saida.rem_no_fim();
     
@@ -104,11 +113,15 @@ void catalogoT::entregarTodas(lib::vetor<Mod>& saida) const {
         saida.add_no_fim(celulas.getById(i));
 }
 
-void catalogoT::limpar() {
-    celulas.limpar();
+void catalogoT::zerarContadores() {
     comparacoes = 0;
     deslocamentos = 0;
     percorridas = 0;
+}
+
+void catalogoT::limpar() {
+    celulas.limpar();
+    zerarContadores();
 }
 
 catalogoT::~catalogoT(){
@@ -121,11 +134,6 @@ long long catalogoT::getComparacoes() const { return comparacoes; }
 long long catalogoT::getDeslocamentos() const { return deslocamentos; }
 long long catalogoT::getPercorridas() const { return percorridas; }
 
-void catalogoT::zerarContadores() {
-    comparacoes = 0;
-    deslocamentos = 0;
-    percorridas = 0;
-}
 
 
 long long produtoInterno(const lib::vetor<Mod>& a, const lib::vetor<Mod>& b) {
