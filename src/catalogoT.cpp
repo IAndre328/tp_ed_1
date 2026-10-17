@@ -68,11 +68,10 @@ void catalogoT::definirCelula(int item, int atributo, int valor) {
 int catalogoT::consultarCelula(int item, int atributo) const {
     int pos = posicao(item, atributo);
     if (pos < celulas.getTamanho()) {
-    const auto& c = celulas.getById(pos);
+        const auto& c = celulas.getById(pos);
         if (c.getIdItem() == item && c.getIdAtributo() == atributo) return c.getValor();
     }
     return 0;
-
 }
 
 int catalogoT::percorrerLinha(int item, lib::vetor<Mod>& saida) {
@@ -84,7 +83,7 @@ int catalogoT::percorrerLinha(int item, lib::vetor<Mod>& saida) {
         return t_percorridas; 
     }
 
-    while (celulas.getById(pos).getIdItem() == item){
+    while (pos < celulas.getTamanho() && celulas.getById(pos).getIdItem() == item){
         t_percorridas++;
         saida.add_no_fim(celulas.getById(pos));
         pos++;
@@ -138,17 +137,6 @@ long long catalogoT::getComparacoes() const { return comparacoes; }
 long long catalogoT::getDeslocamentos() const { return deslocamentos; }
 long long catalogoT::getPercorridas() const { return percorridas; }
 
-
-
-long long produtoInterno(const lib::vetor<Mod>& a, const lib::vetor<Mod>& b) {
-    // TODO: intercalar as duas linhas (dois índices, i e j):
-    //   - atributos iguais   -> soma valor_a * valor_b e avança os dois
-    //   - atributo de a menor -> avança i
-    //   - atributo de b menor -> avança j
-    //   - usar long long para não estourar
-    (void)a; (void)b;
-    return 0;
-}
 
 
 

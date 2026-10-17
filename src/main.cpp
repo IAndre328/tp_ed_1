@@ -196,8 +196,8 @@ int main()
                 for (int i = 0; i < atributos.getTamanho(); i++){
                     if (matriz_atributo.getById(i) != 0){
                         isEmpty = false;
-                        std::cout << " atributo_" << num_atributo 
-                            << i << " " << matriz_atributo.getById(i);
+                        std::cout << " atributo_" << num_atributo
+                            << " " << i << " " << matriz_atributo.getById(i);
                         num_atributo++;
                     }
                 }

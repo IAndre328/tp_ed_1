@@ -2,77 +2,75 @@
 
 namespace tads
 {
-    catalogoL::catalogoL() : 
+    catalogoL::catalogoL() :
         tamanho(0),
-        comparacoes(0), 
-        deslocamentos(0), 
+        comparacoes(0),
+        deslocamentos(0),
         percorridas(0) {}
 
     void catalogoL::receberMigracao(const lib::vetor<Mod>& vetor_mods) {
-        limpar();
+        limpar();   // libera os nós que já existirem
 
         for (int i = 0; i < vetor_mods.getTamanho(); i++) {
-            Mod m = vetor_mods.getById(i); 
+            Mod m = vetor_mods.getById(i);
             definirCelula(m.getIdItem(), m.getIdAtributo(), m.getValor());
         }
     }
 
-
-    int catalogoL::consultarCelula(int item, int atributo) const{
-         if (item < 0 || item >= cabecas_linha.getTamanho()) return 0;
+    int catalogoL::consultarCelula(int item, int atributo) const {
+        if (item < 0 || item >= cabecas_linha.getTamanho()) return 0;
 
         NoCruzado* atual = cabecas_linha.getById(item);
 
-        while (atual != nullptr){
-            if (atual->mod.getIdAtributo() == atributo){
+        while (atual != nullptr) {
+            if (atual->mod.getIdAtributo() == atributo) {
                 return atual->mod.getValor();
             }
-            if (atual->mod.getIdAtributo() > atributo){
+            if (atual->mod.getIdAtributo() > atributo) {
                 break;
             }
-
             atual = atual->proximo_linha;
         }
         return 0;
     }
 
-    void catalogoL::acharAtual(int item, int atributo, NoCruzado*& saida){
+    // Devolve em 'saida' o nó da célula (item, atributo), ou nullptr se não existe
+    void catalogoL::acharAtual(int item, int atributo, NoCruzado*& saida) {
         saida = nullptr;
-
         if (item < 0 || item >= cabecas_linha.getTamanho()) return;
 
         NoCruzado* atual = cabecas_linha.getById(item);
 
-        while (atual != nullptr){
-            if (atual->mod.getIdAtributo() == atributo){
+        while (atual != nullptr) {
+            if (atual->mod.getIdAtributo() == atributo) {
                 saida = atual;
-            }
-            if (atual->mod.getIdAtributo() > atributo){
                 return;
             }
-
+            if (atual->mod.getIdAtributo() > atributo) {
+                return;
+            }
             atual = atual->proximo_linha;
         }
-        return;
     }
 
+    // l_ant: nó anterior na linha; c_ant: nó anterior na coluna
+    // (nullptr significa "o nó fica na cabeça da lista")
     void catalogoL::acharApontadores(int item, int atributo, NoCruzado*& l_ant, NoCruzado*& c_ant) {
         l_ant = nullptr;
         c_ant = nullptr;
 
-        
         if (item >= 0 && item < cabecas_linha.getTamanho()) {
             NoCruzado* anterior = nullptr;
-            NoCruzado* atual = cabecas_coluna.getById(item);
+            NoCruzado* atual = cabecas_linha.getById(item);
 
             while (atual != nullptr) {
                 if (atual->mod.getIdAtributo() >= atributo) {
                     break;
                 }
                 anterior = atual;
-                atual = atual->proximo_coluna;
+                atual = atual->proximo_linha;
             }
-            c_ant = anterior;
+            l_ant = anterior;
         }
 
         if (atributo >= 0 && atributo < cabecas_coluna.getTamanho()) {
@@ -84,49 +82,51 @@ namespace tads
                     break;
                 }
                 anterior = atual;
-                atual = atual->proximo_coluna; 
+                atual = atual->proximo_coluna;
             }
             c_ant = anterior;
         }
     }
 
-    bool catalogoL::removerCelula(int item, int atributo){
+    bool catalogoL::removerCelula(int item, int atributo) {
         NoCruzado* alvo = nullptr;
         acharAtual(item, atributo, alvo);
         if (alvo == nullptr) return false;
 
-
-        NoCruzado* anteriorLinha, *anteriorColuna;
+        NoCruzado* anteriorLinha = nullptr;
+        NoCruzado* anteriorColuna = nullptr;
         acharApontadores(item, atributo, anteriorLinha, anteriorColuna);
 
+        // Desliga o nó da lista da linha
         if (anteriorLinha == nullptr) {
             cabecas_linha.getById(item) = alvo->proximo_linha;
         } else {
             anteriorLinha->proximo_linha = alvo->proximo_linha;
         }
 
+        // Desliga o nó da lista da coluna
         if (anteriorColuna == nullptr) {
             cabecas_coluna.getById(atributo) = alvo->proximo_coluna;
         } else {
             anteriorColuna->proximo_coluna = alvo->proximo_coluna;
         }
 
-
         delete alvo;
         tamanho--;
         return true;
     }
 
+    // Só chamar quando a célula ainda NÃO existe
     void catalogoL::inserirCelula(int item, int atributo, int valor) {
+        // Os vetores de cabeças crescem até cobrir os ids usados
         while (cabecas_linha.getTamanho() <= item) cabecas_linha.add_no_fim(nullptr);
         while (cabecas_coluna.getTamanho() <= atributo) cabecas_coluna.add_no_fim(nullptr);
-
 
         NoCruzado* anteriorLinha = nullptr;
         NoCruzado* anteriorColuna = nullptr;
         acharApontadores(item, atributo, anteriorLinha, anteriorColuna);
 
-        NoCruzado* novoNo = new NoCruzado(item, atributo, valor);   
+        NoCruzado* novoNo = new NoCruzado(item, atributo, valor);
 
         if (anteriorLinha == nullptr) {
             novoNo->proximo_linha = cabecas_linha.getById(item);
@@ -147,24 +147,23 @@ namespace tads
         tamanho++;
     }
 
-    void catalogoL::definirCelula(int item, int atributo, int valor){
+    void catalogoL::definirCelula(int item, int atributo, int valor) {
         if (valor == 0) {
             removerCelula(item, atributo);
             return;
         }
 
-        NoCruzado* aSerAtualizado = nullptr;
-        acharAtual(item, atributo, aSerAtualizado);
+        NoCruzado* existente = nullptr;
+        acharAtual(item, atributo, existente);
 
-        if (aSerAtualizado != nullptr) {
-            aSerAtualizado->mod.setValor(valor);
-        }
-        else {
+        if (existente != nullptr) {
+            existente->mod.setValor(valor);
+        } else {
             inserirCelula(item, atributo, valor);
         }
     }
 
-    int catalogoL::percorrerLinha(int item, lib::vetor<Mod>& saida){
+    int catalogoL::percorrerLinha(int item, lib::vetor<Mod>& saida) {
         while (!saida.isEmpty()) saida.rem_no_fim();
         int t_percorridas = 0;
 
@@ -172,7 +171,7 @@ namespace tads
 
         NoCruzado* atual = cabecas_linha.getById(item);
 
-        while (atual != nullptr){
+        while (atual != nullptr) {
             saida.add_no_fim(atual->mod);
             t_percorridas++;
             percorridas++;
@@ -181,7 +180,7 @@ namespace tads
         return t_percorridas;
     }
 
-    int catalogoL::percorrerColuna(int atributo, lib::vetor<Mod>& saida){
+    int catalogoL::percorrerColuna(int atributo, lib::vetor<Mod>& saida) {
         while (!saida.isEmpty()) saida.rem_no_fim();
         int t_percorridas = 0;
 
@@ -189,7 +188,7 @@ namespace tads
 
         NoCruzado* atual = cabecas_coluna.getById(atributo);
 
-        while (atual != nullptr){
+        while (atual != nullptr) {
             saida.add_no_fim(atual->mod);
             t_percorridas++;
             percorridas++;
@@ -198,20 +197,21 @@ namespace tads
         return t_percorridas;
     }
 
-    void catalogoL::entregarTodas(lib::vetor<Mod>& saida) const{
+    // Entrega por item e, dentro do item, por atributo (a ordem do modo T)
+    void catalogoL::entregarTodas(lib::vetor<Mod>& saida) const {
         saida.limpar();
 
-        for (int i = 0; i < cabecas_linha.getTamanho(); i++){
-            NoCruzado* atual = cabecas_coluna.getById(i);
+        for (int i = 0; i < cabecas_linha.getTamanho(); i++) {
+            NoCruzado* atual = cabecas_linha.getById(i);
 
-            while (atual != nullptr){
+            while (atual != nullptr) {
                 saida.add_no_fim(atual->mod);
                 atual = atual->proximo_linha;
             }
         }
     }
 
-    void catalogoL::zerarContadores(){
+    void catalogoL::zerarContadores() {
         comparacoes = 0;
         deslocamentos = 0;
         percorridas = 0;
@@ -222,9 +222,9 @@ namespace tads
     long long catalogoL::getComparacoes() const { return comparacoes; }
     long long catalogoL::getDeslocamentos() const { return deslocamentos; }
     long long catalogoL::getPercorridas() const { return percorridas; }
-    
-    void catalogoL::limpar(){
 
+    void catalogoL::limpar() {
+        // Todo nó está em alguma lista de linha, então basta apagar por elas
         for (int i = 0; i < cabecas_linha.getTamanho(); i++) {
             NoCruzado* atual = cabecas_linha.getById(i);
 
@@ -233,19 +233,16 @@ namespace tads
                 delete atual;
                 atual = proximo;
             }
-
         }
 
         cabecas_linha.limpar();
         cabecas_coluna.limpar();
         tamanho = 0;
+
         zerarContadores();
-
     }
-    
+
     catalogoL::~catalogoL() {
-        limpar(); 
+        limpar();
     }
-    
-
 }

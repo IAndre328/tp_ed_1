@@ -124,8 +124,6 @@ namespace tads{
         void percorrerLinha(int item, lib::vetor<Mod>& saida);
         void percorrerColuna(int atributo, lib::vetor<Mod>& saida);
 
-        void produtoInterno();
-
         void migrarPara(std::string newModo);
 
         int getTamanho() const;
