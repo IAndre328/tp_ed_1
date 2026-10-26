@@ -22,7 +22,7 @@ int main()
 
         if (cmd == "E") {
             std::cin >> modo;
-            std::cout << "E " << modo << "\n";
+            //std::cout << "E " << modo << "\n";
 
             catalogo.migrarPara(modo);
         }
@@ -33,7 +33,7 @@ int main()
             tads::Atributo temp(nome, atributos.getTamanho());
             atributos.add_no_fim(temp);
 
-            std::cout << "A " << temp.getId() << "\n";
+            //std::cout << "A " << temp.getId() << "\n";
         }
         else if (cmd == "I"){
             std::string nome;
@@ -42,7 +42,7 @@ int main()
             tads::Item temp(nome, itens.getTamanho());
             itens.add_no_fim(temp);
 
-            std::cout << "I " << temp.getId() << "\n";
+            //std::cout << "I " << temp.getId() << "\n";
         }
         else if (cmd == "M"){
            int id_item, id_atributo, valor;
@@ -52,9 +52,9 @@ int main()
 
            tads::Mod t_mod(id_item, id_atributo, valor);
 
-            std::cout << "M " << itens.getById(id_item).getNome() << " "
-                << atributos.getById(id_atributo).getNome() << " "
-                << valor << "\n";
+            // std::cout << "M " << itens.getById(id_item).getNome() << " "
+            //     << atributos.getById(id_atributo).getNome() << " "
+            //     << valor << "\n";
 
             
             catalogo.definirCelula(t_mod);
@@ -66,7 +66,7 @@ int main()
             tads::Aventureiro temp(aventureiros.getTamanho(), nome);
             aventureiros.add_no_fim(temp);
 
-            std::cout << "H " << temp.getId() << "\n";
+            //std::cout << "H " << temp.getId() << "\n";
         }
         else if (cmd == "F"){
             int id_aventureiro, id_item;
@@ -75,14 +75,14 @@ int main()
 
             tads::Encomenda enc(id_aventureiro, id_item);
             forja.enfileira(enc);
-            std::cout << "F " << forja.getTamanho() << "\n";
+            //std::cout << "F " << forja.getTamanho() << "\n";
         }
         else if (cmd == "Z"){
             int turnos;
             std::cin >> turnos;
             
             if (turnos > forja.getTamanho()) turnos = forja.getTamanho();
-            std::cout << "Z " << turnos << "\n";
+            //std::cout << "Z " << turnos << "\n";
 
             if (turnos == 0) continue;
 
@@ -92,12 +92,12 @@ int main()
                 av_atual.equipar(enc_atual.getIdI());
 
                 if (i > 0) std::cout << " ";
-                std::cout << "encomenda_" << i+1
-                    << " " << enc_atual.getIdAv()
-                    << " " << enc_atual.getIdI();
+                // std::cout << "encomenda_" << i+1
+                //     << " " << enc_atual.getIdAv()
+                //     << " " << enc_atual.getIdI();
 
             }
-            std::cout << "\n";
+            //std::cout << "\n";
         }
         else if (cmd == "D"){
             int id_aventureiro;
@@ -106,14 +106,15 @@ int main()
             tads::Aventureiro& t_av = aventureiros.getById(id_aventureiro); 
             const std::string& t_nome = t_av.getNome();
             
-            std::cout << "D " << t_nome << " ";
+            //std::cout << "D " << t_nome << " ";
 
-            if (t_av.semItens()) std::cout << "VAZIO" << "\n";
-            else{
+            if (!t_av.semItens()) //std::cout << "VAZIO" << "\n";
+            //else
+            {
                 int id_item_remov = t_av.ultimoEquipado();
                 const tads::Item& item_remov = itens.getById(id_item_remov);
 
-                std::cout << item_remov.getNome() << "\n";
+                //std::cout << item_remov.getNome() << "\n";
                 t_av.desequipar();
             }
 
@@ -125,23 +126,23 @@ int main()
             lib::vetor<tads::Mod> saida;
             catalogo.percorrerLinha(id_item, saida);
 
-            std::cout << "LI " << itens.getById(id_item).getNome() << " ";
+            //std::cout << "LI " << itens.getById(id_item).getNome() << " ";
 
-            if (saida.isEmpty()){
-                std::cout << "VAZIO" << "\n";
-            }
-            else {
-                for (int i = 0; i < saida.getTamanho() -1; i++){
-                    std:: cout << "atributo_" << i+1 
-                    << " " << saida.getById(i).getIdAtributo()
-                    << " " << saida.getById(i).getValor()
-                    << " ";
-                }
-                std:: cout << "atributo_" << saida.getTamanho() 
-                    << " " << saida.getById(saida.getTamanho() -1).getIdAtributo()
-                    << " " << saida.getById(saida.getTamanho() -1).getValor()
-                    << "\n";
-            }
+            // if (saida.isEmpty()){
+            //     std::cout << "VAZIO" << "\n";
+            // }
+            // else {
+            //     for (int i = 0; i < saida.getTamanho() -1; i++){
+            //         std:: cout << "atributo_" << i+1 
+            //         << " " << saida.getById(i).getIdAtributo()
+            //         << " " << saida.getById(i).getValor()
+            //         << " ";
+            //     }
+            //     std:: cout << "atributo_" << saida.getTamanho() 
+            //         << " " << saida.getById(saida.getTamanho() -1).getIdAtributo()
+            //         << " " << saida.getById(saida.getTamanho() -1).getValor()
+            //         << "\n";
+            // }
         }
         else if (cmd == "LA"){
             int id_atributo;
@@ -150,23 +151,23 @@ int main()
             lib::vetor<tads::Mod> saida;
             catalogo.percorrerColuna(id_atributo, saida);
 
-            std::cout << "LA " << atributos.getById(id_atributo).getNome() << " ";
+            //std::cout << "LA " << atributos.getById(id_atributo).getNome() << " ";
 
-            if (saida.isEmpty()){
-                std::cout << "VAZIO" << "\n";
-            }
-            else {
-                for (int i = 0; i < saida.getTamanho() -1; i++){
-                    std:: cout << "item_" << i+1 
-                    << " " << saida.getById(i).getIdItem()
-                    << " " << saida.getById(i).getValor()
-                    << " ";
-                }
-                std:: cout << "item_" << saida.getTamanho() 
-                    << " " << saida.getById(saida.getTamanho() -1).getIdItem()
-                    << " " << saida.getById(saida.getTamanho() -1).getValor()
-                    << "\n";
-            }
+            // if (saida.isEmpty()){
+            //     std::cout << "VAZIO" << "\n";
+            // }
+            // else {
+            //     for (int i = 0; i < saida.getTamanho() -1; i++){
+            //         std:: cout << "item_" << i+1 
+            //         << " " << saida.getById(i).getIdItem()
+            //         << " " << saida.getById(i).getValor()
+            //         << " ";
+            //     }
+            //     std:: cout << "item_" << saida.getTamanho() 
+            //         << " " << saida.getById(saida.getTamanho() -1).getIdItem()
+            //         << " " << saida.getById(saida.getTamanho() -1).getValor()
+            //         << "\n";
+            // }
 
         }
         else if (cmd == "LH"){
@@ -175,7 +176,7 @@ int main()
             const tads::Aventureiro& av_atual = aventureiros.getById(id_aventureiro);
 
             if (av_atual.semItens()){
-                std::cout << "LH " << av_atual.getNome() << " VAZIO" << "\n";
+                //std::cout << "LH " << av_atual.getNome() << " VAZIO" << "\n";
             }
             else {
                 lib::vetor<int> matriz_atributo;
@@ -190,23 +191,23 @@ int main()
                 }
 
                 bool isEmpty = true;
-                std::cout << "LH " << av_atual.getNome();
+                //std::cout << "LH " << av_atual.getNome();
 
                 int num_atributo = 1;
                 for (int i = 0; i < atributos.getTamanho(); i++){
                     if (matriz_atributo.getById(i) != 0){
                         isEmpty = false;
-                        std::cout << " atributo_" << num_atributo
-                            << " " << i << " " << matriz_atributo.getById(i);
+                        // std::cout << " atributo_" << num_atributo
+                        //     << " " << i << " " << matriz_atributo.getById(i);
                         num_atributo++;
                     }
                 }
                 
                 if (isEmpty == true) {
-                    std::cout << " VAZIO";
+                    //std::cout << " VAZIO";
                 }
                 
-                std::cout << "\n";
+                //std::cout << "\n";
             }
 
 
@@ -238,8 +239,8 @@ int main()
             for (int p = 0; p < k; p++){
                 long long s = scores.getById(p);
                 long long centavos = s % 100;
-                std::cout << "Q " << p + 1 << " " << ids.getById(p) << " "
-                          << s / 100 << "." << (centavos < 10 ? "0" : "") << centavos << "\n";
+                // std::cout << "Q " << p + 1 << " " << ids.getById(p) << " "
+                //           << s / 100 << "." << (centavos < 10 ? "0" : "") << centavos << "\n";
             }
         }
     }

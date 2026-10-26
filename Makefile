@@ -1,45 +1,45 @@
-CXX      := g++
-CXXFLAGS := -std=c++11 -Wall -Wextra -O2
+# Definição do compilador e flags
+CXX = g++
+CXXFLAGS = -std=c++11 -O2 -Wall -Iinclude -MMD -MP
+SANITIZER_FLAGS = -fsanitize=address,undefined -g
 
-INC_DIR := include
-SRC_DIR := src
-OBJ_DIR := obj
-BIN_DIR := bin
+# Diretórios do projeto
+SRC_DIR = src
+OBJ_DIR = obj
+BIN_DIR = bin
 
-TARGET := $(BIN_DIR)/tp1.out
+# Executável final exigido pela especificação
+TARGET = $(BIN_DIR)/tp1.out
 
-SRCS := $(shell find $(SRC_DIR) -name "*.cpp")
-OBJS := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRCS))
-DEPS := $(OBJS:.o=.d)
+# Listagem automática de ficheiros fonte e objectos
+SRCS = $(wildcard $(SRC_DIR)/*.cpp)
+OBJS = $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRCS))
+DEPS = $(OBJS:.o=.d)
 
-.PHONY: all clean run sanitize
-
+# Alvo principal
 all: $(TARGET)
 
-# Liga todos os .o no executavel final
-$(TARGET): $(OBJS)
-	@mkdir -p $(BIN_DIR)
+# Regra para gerar o executável
+$(TARGET): $(OBJS) | $(BIN_DIR)
 	$(CXX) $(CXXFLAGS) $(OBJS) -o $@
 
-# Compila cada .cpp de src em um .o dentro de obj
-# -MMD -MP gera arquivos .d para recompilar quando um .h mudar
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) -I$(INC_DIR) -MMD -MP -c $< -o $@
+# Regra para compilar os ficheiros .cpp em .o (dentro de obj/)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Build de depuracao (so para voce): make sanitize
-# Usa pasta de objetos propria para nao misturar com o build normal
-sanitize:
-	$(MAKE) OBJ_DIR=$(OBJ_DIR)/san TARGET=$(BIN_DIR)/tp1_san.out \
-		CXXFLAGS="-std=c++11 -Wall -Wextra -g -O1 -fno-omit-frame-pointer -fsanitize=address,undefined" \
-		$(BIN_DIR)/tp1_san.out
+# Criação automática das pastas obj e bin caso não existam
+$(BIN_DIR) $(OBJ_DIR):
+	mkdir -p $@
 
-
-# Deixa bin e obj vazias (como exigido na entrega)
+# Limpeza dos ficheiros compilados
 clean:
-	rm -rf $(OBJ_DIR)/* $(BIN_DIR)/*
+	rm -rf $(OBJ_DIR) $(BIN_DIR)
 
-run:
-	./bin/tp1.out
+# Alvo opcional para compilar com AddressSanitizer e UndefinedBehaviorSanitizer
+sanitize: CXXFLAGS += $(SANITIZER_FLAGS)
+sanitize: clean $(TARGET)
 
+# Inclui as dependências geradas automaticamente pelo -MMD
 -include $(DEPS)
+
+.PHONY: all clean sanitize
