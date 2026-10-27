@@ -9,7 +9,7 @@ namespace tads
         percorridas(0) {}
 
     void catalogoL::receberMigracao(const lib::vetor<Mod>& vetor_mods) {
-        limpar();   // libera os nós que já existirem
+        limpar();
 
         for (int i = 0; i < vetor_mods.getTamanho(); i++) {
             Mod m = vetor_mods.getById(i);
@@ -34,7 +34,7 @@ namespace tads
         return 0;
     }
 
-    // Devolve em 'saida' o nó da célula (item, atributo), ou nullptr se não existe
+    
     void catalogoL::acharAtual(int item, int atributo, NoCruzado*& saida) {
         saida = nullptr;
         if (item < 0 || item >= cabecas_linha.getTamanho()) return;
@@ -97,14 +97,14 @@ namespace tads
         NoCruzado* anteriorColuna = nullptr;
         acharApontadores(item, atributo, anteriorLinha, anteriorColuna);
 
-        // Desliga o nó da lista da linha
+        
         if (anteriorLinha == nullptr) {
             cabecas_linha.getById(item) = alvo->proximo_linha;
         } else {
             anteriorLinha->proximo_linha = alvo->proximo_linha;
         }
 
-        // Desliga o nó da lista da coluna
+        
         if (anteriorColuna == nullptr) {
             cabecas_coluna.getById(atributo) = alvo->proximo_coluna;
         } else {
@@ -118,7 +118,7 @@ namespace tads
 
     // Só chamar quando a célula ainda NÃO existe
     void catalogoL::inserirCelula(int item, int atributo, int valor) {
-        // Os vetores de cabeças crescem até cobrir os ids usados
+        
         while (cabecas_linha.getTamanho() <= item) cabecas_linha.add_no_fim(nullptr);
         while (cabecas_coluna.getTamanho() <= atributo) cabecas_coluna.add_no_fim(nullptr);
 
@@ -197,7 +197,7 @@ namespace tads
         return t_percorridas;
     }
 
-    // Entrega por item e, dentro do item, por atributo (a ordem do modo T)
+    
     void catalogoL::entregarTodas(lib::vetor<Mod>& saida) const {
         saida.limpar();
 
@@ -224,7 +224,7 @@ namespace tads
     long long catalogoL::getPercorridas() const { return percorridas; }
 
     void catalogoL::limpar() {
-        // Todo nó está em alguma lista de linha, então basta apagar por elas
+        
         for (int i = 0; i < cabecas_linha.getTamanho(); i++) {
             NoCruzado* atual = cabecas_linha.getById(i);
 

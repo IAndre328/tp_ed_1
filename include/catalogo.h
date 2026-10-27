@@ -15,23 +15,18 @@ namespace tads{
         long long deslocamentos;            // elementos empurrados em inserção/remoção
         long long percorridas;              // células visitadas em percursos
  
-        // Busca binária pelo par (item, atributo).
-        // Devolve a primeira posição cujo par é >= ao pedido
-        // (se for igual, a célula existe; senão, é o ponto de inserção).
+        // A busca binária
         int posicao(int item, int atributo) const;
  
     public:
         catalogoT();
         void receberMigracao(const lib::vetor<Mod>& vetor_mods);
  
-        // Regra do zero: valor 0 remove; célula existente é substituída; senão insere
         void definirCelula(int item, int atributo, int valor);
 
         // Valor da célula, ou 0 se não existe
         int consultarCelula(int item, int atributo) const;
  
-        // Preenchem 'saida' (limpando antes) em ordem crescente e devolvem
-        // quantas células foram percorridas
         int percorrerLinha(int item, lib::vetor<Mod>& saida);
         int percorrerColuna(int atributo, lib::vetor<Mod>& saida);
  
@@ -40,7 +35,6 @@ namespace tads{
  
         int getTamanho() const;
  
-        // Leitura dos contadores
         long long getComparacoes() const;
         long long getDeslocamentos() const;
         long long getPercorridas() const;
@@ -79,16 +73,12 @@ namespace tads{
         void acharApontadores(int item, int atributo, NoCruzado*& l_ant, NoCruzado*& c_ant);
         void acharAtual(int item, int atributo, NoCruzado*& saida);
  
-        // true se existia e foi removida
         bool removerCelula(int item, int atributo);
         void inserirCelula(int item, int atributo, int valor);
  
-        // Valor da célula, ou 0 se não existe
         int consultarCelula(int item, int atributo) const;
 
  
-        // Preenchem 'saida' (limpando antes) em ordem crescente e devolvem
-        // quantas células foram percorridas
         int percorrerLinha(int item, lib::vetor<Mod>& saida);
         int percorrerColuna(int atributo, lib::vetor<Mod>& saida);
  
@@ -97,7 +87,6 @@ namespace tads{
  
         int getTamanho() const;
  
-        // Leitura dos contadores
         long long getComparacoes() const;
         long long getDeslocamentos() const;
         long long getPercorridas() const;

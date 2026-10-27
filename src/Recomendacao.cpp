@@ -5,8 +5,6 @@
 namespace tads {
 
     namespace {
-        // Deixa o vetor com exatamente n posições iguais a 'valor',
-        // reaproveitando o bloco já alocado
         template <typename T>
         void preencher(lib::vetor<T>& v, int n, const T& valor) {
             while (!v.isEmpty()) v.rem_no_fim();
@@ -78,7 +76,7 @@ namespace tads {
         esvaziar(ids);
         esvaziar(scores);
 
-        // Prepara os vetores de trabalho
+        
         for (int m = 0; m < 3; m++) preencher(chaves[m], N, 0LL);
         preencher(pontos, N, 0LL);
         preencher(ordem, N, 0);
@@ -86,7 +84,7 @@ namespace tads {
         preencher(equipado, N, (char)0);
         preencher(build, T, 0LL);
 
-        // 1) Vetor da build e marcação dos itens equipados
+        
         for (int b = 0; b < av.getTamanhoBuild(); b++) {
             int item = av.getBuildIdItem(b);
             equipado.getById(item) = 1;
@@ -101,7 +99,6 @@ namespace tads {
         for (int a = 0; a < T; a++) somaQuadBuild += build.getById(a) * build.getById(a);
         double normaBuild = std::sqrt((double)somaQuadBuild);
 
-        // 2) Uma passada pelo catálogo calcula as três métricas de todos os itens
         for (int i = 0; i < N; i++) {
             cat.percorrerLinha(i, linha);
 
@@ -136,7 +133,7 @@ namespace tads {
             chaves[SINERGIA].getById(i) = std::llround(valorSinergia * 1000000.0);
         }
 
-        // 3) Para cada métrica: ordena todo o catálogo e distribui os pontos (N - posição) * peso
+        
         for (int p = 0; p < metricas.getTamanho(); p++) {
             const lib::vetor<long long>& chave = chaves[metricas.getById(p)];
             long long peso = pesos.getById(p);
@@ -149,7 +146,7 @@ namespace tads {
             }
         }
 
-        // 4) Descarta os equipados e ordena os candidatos pela pontuação final
+        
         esvaziar(ordem);
         for (int i = 0; i < N; i++) {
             if (equipado.getById(i) == 0) ordem.add_no_fim(i);
